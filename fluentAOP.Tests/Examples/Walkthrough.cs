@@ -24,7 +24,7 @@ using FluentAop.Utility;
 
 namespace FluentAop.Tests.Examples
 {
-    public class fluentAOP_Walkthrough
+    public class Walkthrough
     {
         #region Advices
         public void Example_of_how_to_apply_OnBefore_advice()
@@ -226,6 +226,31 @@ namespace FluentAop.Tests.Examples
             // Go!
             // --OnAfter--
         }
+
+        public void Example_of_how_to_intercept_all_methods_with_a_single_instruction() 
+        {
+            var foo = new Proxy<IFoo>()
+                .Target(new Foo())
+                .InterceptAll()
+                .OnBefore(() => Console.WriteLine("--OnBefore--"))
+                .OnAfter(() => Console.WriteLine("--OnAfter--"))
+                .Save();
+
+            foo.Go(); // Intercepted
+            foo.Name = "foo"; // Intercepted
+            var name = foo.Name; // Intercepted
+        }
+
+        [Fact]
+        public void Example_of_how_to_use_a_factory_method_to_create_proxies() 
+        {
+            var target = new Foo();
+            var foo = GenericFactory.Create<IFoo>(target);
+
+            foo.Go(); // Intercepted
+            foo.Name = "foo"; // Intercepted
+            var name = foo.Name; // Intercepted
+        }
     }
 
     #region Helpers
@@ -267,6 +292,18 @@ namespace FluentAop.Tests.Examples
         string Null();
         void Overloaded(int i);
         void Overloaded(string s);
+    }
+
+    class GenericFactory
+    {
+        public static TTarget Create<TTarget>(TTarget target)
+        {
+            return new Proxy<TTarget>()
+                .Target(target)
+                .InterceptAll()
+                .OnBefore(() => Console.WriteLine("--OnBefore--"))
+                .Save();
+        }
     }
     #endregion
 }
