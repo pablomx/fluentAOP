@@ -91,6 +91,14 @@
     <Compile Include="Helpers\Proxy.cs" />
     <Compile Include="Helpers\ObjectMother.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="v1.1\Advice.cs" />
+    <Compile Include="v1.1\Aspect.cs" />
+    <Compile Include="v1.1\AspectBlock.cs" />
+    <Compile Include="v1.1\AspectContextTester.cs" />
+    <Compile Include="v1.1\AspectContext.cs" />
+    <Compile Include="v1.1\AspectFluentBuilder.cs" />
+    <Compile Include="v1.1\IAspectBuilder.cs" />
+    <Compile Include="v1.1\Pointcut.cs" />
     <Compile Include="VirtualMethodInterceptionTester.cs" />
   </ItemGroup>
   <ItemGroup>
