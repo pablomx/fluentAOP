@@ -45,7 +45,7 @@ namespace FluentAop.Interceptors
 		object Proxi.IInterceptor.Run(IMethodInvocation mi)
 		{
 			// tries to find a registered method that matches...
-			var interceptorState = FindInterceptorStateByMethodSignature(mi.Method.ExtractSignature());
+			var interceptorState = FindInterceptorStateByMethodSignature(mi.Method.GetMethodSignature());
             
             var hasInterceptorState = interceptorState != null;
 			var hasTargetObject = mi.Target != null;

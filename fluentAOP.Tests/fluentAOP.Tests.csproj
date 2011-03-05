@@ -91,14 +91,21 @@
     <Compile Include="Helpers\Proxy.cs" />
     <Compile Include="Helpers\ObjectMother.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="v1.1\Advice.cs" />
-    <Compile Include="v1.1\Aspect.cs" />
-    <Compile Include="v1.1\AspectBlock.cs" />
-    <Compile Include="v1.1\AspectContextTester.cs" />
-    <Compile Include="v1.1\AspectContext.cs" />
-    <Compile Include="v1.1\AspectFluentBuilder.cs" />
-    <Compile Include="v1.1\IAspectBuilder.cs" />
-    <Compile Include="v1.1\Pointcut.cs" />
+    <Compile Include="v2.0\Advice.cs" />
+    <Compile Include="v2.0\AdviceType.cs" />
+    <Compile Include="v2.0\AopInterceptor.cs" />
+    <Compile Include="v2.0\AopInterceptorTester.cs" />
+    <Compile Include="v2.0\Aspect.cs" />
+    <Compile Include="v2.0\AspectBlock.cs" />
+    <Compile Include="v2.0\AspectContextTester.cs" />
+    <Compile Include="v2.0\AspectContext.cs" />
+    <Compile Include="v2.0\AspectExecutorVisitor.cs" />
+    <Compile Include="v2.0\AspectFluentBuilder.cs" />
+    <Compile Include="v2.0\IAfterThrowingAdviceBuilderSupport.cs" />
+    <Compile Include="v2.0\IAspectBuilder.cs" />
+    <Compile Include="v2.0\IAspectVisitor.cs" />
+    <Compile Include="v2.0\IBeforeAdviceBuilderSupport.cs" />
+    <Compile Include="v2.0\Pointcut.cs" />
     <Compile Include="VirtualMethodInterceptionTester.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -123,6 +130,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="v2.0\notes.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

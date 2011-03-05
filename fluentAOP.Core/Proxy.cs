@@ -83,7 +83,7 @@ namespace FluentAop
 			var methods = typeof(T)
 				.GetMethodsToIntercept()
 				.SelectGetters();
-			RegisterSignatures(methods.Select(m => m.ExtractSignature()));
+			RegisterSignatures(methods.Select(m => m.GetMethodSignature()));
 			return this;
 		}
 
@@ -92,21 +92,21 @@ namespace FluentAop
 			var methods = typeof(T)
 				.GetMethodsToIntercept()
 				.SelectSetters();
-			RegisterSignatures(methods.Select(m => m.ExtractSignature()));
+			RegisterSignatures(methods.Select(m => m.GetMethodSignature()));
 			return this;
 		}
 
 		public Proxy<T> InterceptAll()
 		{
 			var methods = typeof(T).GetMethodsToIntercept();
-			RegisterSignatures(methods.Select(m => m.ExtractSignature()));
+			RegisterSignatures(methods.Select(m => m.GetMethodSignature()));
 			return this;
 		}
 
         public Proxy<T> InterceptMethods(params Expression<Action<T>>[] methods)
         {
             Require.ArgumentNotNull("methods", methods);
-            var signatures = methods.Select(p => p.GetMethodExpression().Method.ExtractSignature());
+            var signatures = methods.Select(p => p.GetMethodExpression().Method.GetMethodSignature());
             RegisterSignatures(signatures);
             return this;
         }
@@ -117,7 +117,7 @@ namespace FluentAop
             var methods = typeof(T)
                 .GetMethodsToIntercept()
                 .Where(m => predicate(m));
-            RegisterSignatures(methods.Select(m => m.ExtractSignature()));
+            RegisterSignatures(methods.Select(m => m.GetMethodSignature()));
             return this;
         }
 
@@ -318,7 +318,7 @@ namespace FluentAop
 		private void RegisterMethods(params MethodCallExpression[] methods)
 		{
             if (!isInterface) methods.ForEach(m => Require.OverridableMethod(m));
-            RegisterSignatures(methods.Select(m => m.Method.ExtractSignature()));
+            RegisterSignatures(methods.Select(m => m.Method.GetMethodSignature()));
 		}
 
 		private void RegisterSignatures(IEnumerable<MethodSignature> signatures)
