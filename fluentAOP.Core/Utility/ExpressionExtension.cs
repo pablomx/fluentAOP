@@ -22,7 +22,18 @@ namespace FluentAop.Utility
 {
 	public static class ExpressionExtension
 	{
-		public static MethodCallExpression GetMethodExpression<T>(this Expression<Action<T>> method)
+        public static MethodSignature GetMethodSignature<T>(this Expression<Action<T>> exp)
+        {
+            return exp.GetMethodExpression<T>().Method.GetMethodSignature();
+        }
+
+        public static MethodSignature GetMethodSignature<T>(this Expression<Func<T, object>> exp)
+        {
+            return exp.GetMethodExpression<T>().Method.GetMethodSignature();
+        }
+        
+
+        public static MethodCallExpression GetMethodExpression<T>(this Expression<Action<T>> method)
 		{
 			if (method.Body.NodeType != ExpressionType.Call) throw new ArgumentException("Method call expected", method.Body.ToString());
 			return (MethodCallExpression) method.Body;

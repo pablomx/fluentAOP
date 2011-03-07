@@ -45,7 +45,7 @@ namespace FluentAop.Utility
 					select t.ParameterType).ToArray();
 		}
 
-        public static MethodSignature ExtractSignature(this MethodInfo info)
+        public static MethodSignature GetMethodSignature(this MethodInfo info)
         {
             return new MethodSignature(info.Name, info.GetMethodParameterTypes());
         }
