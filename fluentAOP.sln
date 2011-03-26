@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fluentAOP.Tests", "fluentAO
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Referenced Projects", "Referenced Projects", "{A0CFFC9D-FA00-42F3-AC6A-EDDECE4844C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fluentAOP.v2", "fluentAOP.v2\fluentAOP.v2.csproj", "{15A463BB-8C27-4015-AC29-2E3E6A737A3D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{06DF4E14-8E82-4E4E-A4C5-07A813190DA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06DF4E14-8E82-4E4E-A4C5-07A813190DA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06DF4E14-8E82-4E4E-A4C5-07A813190DA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15A463BB-8C27-4015-AC29-2E3E6A737A3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15A463BB-8C27-4015-AC29-2E3E6A737A3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15A463BB-8C27-4015-AC29-2E3E6A737A3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15A463BB-8C27-4015-AC29-2E3E6A737A3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

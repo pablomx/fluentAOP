@@ -1,0 +1,11 @@
+C:\@dev\Me\fluentAOP.gh\fluentAOP.v2\obj\Debug\ResolveAssemblyReference.cache
+C:\@dev\Me\fluentAOP.gh\fluentAOP.v2\bin\Debug\fluentAOP.v2.dll
+C:\@dev\Me\fluentAOP.gh\fluentAOP.v2\bin\Debug\fluentAOP.v2.pdb
+C:\@dev\Me\fluentAOP.gh\fluentAOP.v2\bin\Debug\Proxi.dll
+C:\@dev\Me\fluentAOP.gh\fluentAOP.v2\bin\Debug\Spring.Aop.dll
+C:\@dev\Me\fluentAOP.gh\fluentAOP.v2\bin\Debug\LinFu.DynamicProxy.dll
+C:\@dev\Me\fluentAOP.gh\fluentAOP.v2\bin\Debug\Castle.Core.dll
+C:\@dev\Me\fluentAOP.gh\fluentAOP.v2\bin\Debug\Spring.Core.dll
+C:\@dev\Me\fluentAOP.gh\fluentAOP.v2\bin\Debug\Common.Logging.dll
+C:\@dev\Me\fluentAOP.gh\fluentAOP.v2\obj\Debug\fluentAOP.v2.dll
+C:\@dev\Me\fluentAOP.gh\fluentAOP.v2\obj\Debug\fluentAOP.v2.pdb
