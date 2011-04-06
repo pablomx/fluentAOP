@@ -29,8 +29,8 @@ namespace FluentAop.Tests
         //bool WasExecuted { get; set; }
 
         void Go();
-        void OverloadedGo(string a);
-        void OverloadedGo(int a);
+        void OverloadedGo(string s);
+        void OverloadedGo(int i);
         void Fail();
         int Return();
 
@@ -72,15 +72,20 @@ namespace FluentAop.Tests
             WasExecuted = true;
 		}
 
-		public void OverloadedGo(string a)
+		public virtual void OverloadedGo(string s)
 		{
             WasExecuted = true;
 		}
 
-		public void OverloadedGo(int a)
+        public virtual void OverloadedGo(int i)
 		{
             WasExecuted = true;
 		}
+
+        public virtual void OverloadedGo(System.Text.StringBuilder sb)
+        {
+            WasExecuted = true;
+        }
 
 		public void Fail()
 		{

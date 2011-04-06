@@ -130,7 +130,7 @@ syntax:
 			
 			.AfterReturning
 			.AfterThrowing
-			.BeforeInvoking
+			.BeforeInvoking | .OnInvoking
 			
 		var pointcut = new Pointcut<IFoo>("");
 		pointcut.Append(foo => foo.Go())

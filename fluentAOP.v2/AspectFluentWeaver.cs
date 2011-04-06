@@ -13,7 +13,7 @@ namespace FluentAop.Poc
 
         private List<KeyValuePair<string, Type>> keys;
         private AspectContext context;
-
+        private Proxi.ProxyFactory factory = new Proxi.ProxyFactory();
 
         public AspectFluentWeaver(AspectContext context)
         {
@@ -40,10 +40,18 @@ namespace FluentAop.Poc
 
         public T To<T>(T t) where T : class
         {
-            var instance = context.Weave<T>(t, keys.ToArray());
+            var instance = Weave<T>(t, keys.ToArray());
 
             keys.Clear();
             return instance;
+        }
+
+        private T Weave<T>(T target, params KeyValuePair<string, Type>[] keys)
+        {
+            var aspects = context.SelectAspects(keys);
+            if (aspects.Count() == 0) throw new InvalidOperationException("Unable to find aspects. Please specify a valid aspect key.");
+            var proxy = factory.Create<T>(target, new AopInterceptor(aspects));
+            return proxy;
         }
 
         public T To<T>() where T : class, new()

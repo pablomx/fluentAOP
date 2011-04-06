@@ -5,8 +5,13 @@ using System.Reflection;
 
 namespace FluentAop.Poc
 {
-    public static class With
+    public static class It
     {
+        public static T Param<T>()
+        {
+            return default(T);
+        }
+
         public static KeyValuePair<string, Type> Aspect(string name)
         {
             return new KeyValuePair<string, Type>(name, typeof(Aspect));

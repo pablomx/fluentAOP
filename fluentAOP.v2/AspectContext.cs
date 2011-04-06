@@ -11,7 +11,6 @@ namespace FluentAop.Poc
     public class AspectContext : IDisposable
     {
         private IDictionary<KeyValuePair<string, Type>, Aspect> registry;
-        private Proxi.ProxyFactory factory = new Proxi.ProxyFactory();
         public IAspectWeaver Weaver {get; private set;}
 
         #region Ctors
@@ -22,29 +21,28 @@ namespace FluentAop.Poc
         }
         #endregion
 
-        #region Describe
-        public IAspectBuilder DescribeAspect()
-        {
-            return DescribeAspect(string.Empty);
-        }
-
-        public IAspectBuilder DescribeAspect(string name)
-        {
-            var builder = new AspectFluentBuilder(new Aspect(name), this);
-            return builder;
-        }
-        #endregion
-
         #region Register
+        
+        public void RegisterAspect<T>() where T : Aspect, new() 
+        {
+            RegisterAspect<T>(string.Empty);
+        }
+        
+        public void RegisterAspect<T>(string name) where T : Aspect, new()
+        {
+            var aspect = new T { Name = name};
+            RegisterAspect(aspect);
+        }
+
         public void RegisterAspect<T>(T aspect) where T : Aspect
         {
-            RegisterAspect(aspect.Name, aspect);
+            using (var describer = new AspectFluentBuilder(this, aspect))
+            {
+                aspect.Describe(describer);
+                registry.Add(new KeyValuePair<string, Type>(aspect.Name, typeof(T)), aspect);
+            }            
         }
 
-        public void RegisterAspect<T>(string name, T aspect) where T : Aspect
-        {
-            registry.Add(new KeyValuePair<string, Type>(name, typeof(T)), aspect);
-        }
         #endregion
 
         #region Contains
@@ -59,42 +57,6 @@ namespace FluentAop.Poc
         }
         #endregion
 
-        #region Weave
-
-        public T Weave<T>(params KeyValuePair<string, Type>[] keys) where T : new() 
-        {
-            return Weave<T>(new T(), keys);
-        }
-
-        public T Weave<T>(T target, params KeyValuePair<string, Type>[] keys)
-        {
-            IEnumerable<Aspect> aspects = null;
-            if (keys.Count() == 0) aspects = registry.Select(a => a.Value); // selects all aspects
-            else aspects = registry
-                .Where(a => keys.Any(k => k.Equals(a.Key)))
-                .Select(a => a.Value);
-
-            if (aspects.Count() == 0) throw new InvalidOperationException("");
-            var proxy = factory.Create<T>(target, new AopInterceptor(aspects));
-            return proxy;
-        }
-
-        public T Weave<T>(T target, Func<Aspect, bool> predicate)
-        {
-            var aspects = registry
-                .Where(a => predicate(a.Value))
-                .Select(a => a.Value);
-
-            var proxy = factory.Create<T>(target, new AopInterceptor(aspects));
-            return proxy;
-        }
-
-        public T Weave<T>(Func<Aspect, bool> predicate) where T: new()
-        {
-            return Weave<T>(new T(), predicate);
-        }
-        #endregion
-
         #region IDisposable Members
 
         public void Dispose()
@@ -102,5 +64,23 @@ namespace FluentAop.Poc
             registry = null;
         }
         #endregion
+
+        public IEnumerable<Aspect> SelectAspects(params KeyValuePair<string, Type>[] keys)
+        {
+            IEnumerable<Aspect> aspects = null;
+            if (keys.Count() == 0) aspects = registry.Select(a => a.Value); // selects all aspects
+            else aspects = registry
+                .Where(a => keys.Any(k => k.Equals(a.Key)))
+                .Select(a => a.Value);
+
+            return aspects;
+        }
+
+        public IAspectBuilder DescribeAspect(string name)
+        {
+            var aspect = new Aspect { Name = name };
+            RegisterAspect<Aspect>(aspect);            
+            return new AspectFluentBuilder(this, aspect);
+        }
     }
 }

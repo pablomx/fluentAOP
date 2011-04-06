@@ -114,12 +114,6 @@
     <Compile Include="VirtualMethodInterceptionTester.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\fluentAOP.Core\fluentAOP.Core.csproj">
-      <Project>{285D151C-73D3-4073-902C-39BF52DB36BD}</Project>
-      <Name>fluentAOP.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
@@ -138,6 +132,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="v2.0\notes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\fluentAOP.Core\fluentAOP.Core.csproj">
+      <Project>{285D151C-73D3-4073-902C-39BF52DB36BD}</Project>
+      <Name>fluentAOP.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -58,7 +58,7 @@
     <Compile Include="AspectExecutorVisitor.cs" />
     <Compile Include="AspectFluentBuilder.cs" />
     <Compile Include="AspectFluentWeaver.cs" />
-    <Compile Include="AspectKey.cs" />
+    <Compile Include="It.cs" />
     <Compile Include="IAdvice.cs" />
     <Compile Include="IAfterThrowingAdviceBuilderSupport.cs" />
     <Compile Include="IAspectBuilder.cs" />

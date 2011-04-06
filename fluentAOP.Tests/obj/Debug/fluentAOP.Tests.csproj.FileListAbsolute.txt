@@ -1,12 +1,7 @@
 C:\Users\pabloo\Desktop\fluentAOP.gh\fluentAOP.Tests\bin\Debug\FluentAop.Tests.dll
 C:\Users\pabloo\Desktop\fluentAOP.gh\fluentAOP.Tests\bin\Debug\FluentAop.Tests.pdb
-C:\Users\pabloo\Desktop\fluentAOP.gh\fluentAOP.Tests\bin\Debug\Castle.Core.dll
-C:\Users\pabloo\Desktop\fluentAOP.gh\fluentAOP.Tests\bin\Debug\Common.Logging.dll
 C:\Users\pabloo\Desktop\fluentAOP.gh\fluentAOP.Tests\bin\Debug\FluentAop.dll
-C:\Users\pabloo\Desktop\fluentAOP.gh\fluentAOP.Tests\bin\Debug\LinFu.DynamicProxy.dll
 C:\Users\pabloo\Desktop\fluentAOP.gh\fluentAOP.Tests\bin\Debug\Proxi.dll
-C:\Users\pabloo\Desktop\fluentAOP.gh\fluentAOP.Tests\bin\Debug\Spring.Aop.dll
-C:\Users\pabloo\Desktop\fluentAOP.gh\fluentAOP.Tests\bin\Debug\Spring.Core.dll
 C:\Users\pabloo\Desktop\fluentAOP.gh\fluentAOP.Tests\bin\Debug\xunit.dll
 C:\Users\pabloo\Desktop\fluentAOP.gh\fluentAOP.Tests\bin\Debug\FluentAop.pdb
 C:\Users\pabloo\Desktop\fluentAOP.gh\fluentAOP.Tests\obj\Debug\ResolveAssemblyReference.cache
