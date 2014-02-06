@@ -16,47 +16,33 @@
    •——————————————————————————————————————————————————————————————————————————• */
 
 using System;
-using System.Linq;
-using System.Reflection;
+using System.Linq.Expressions;
 
 namespace FluentAop.Utility
 {
-	public static class MethodInfoExtension
-	{
-
-        public static MethodInfo[] SelectOverridableMethods(this MethodInfo[] methods)
+    public static class Require
+    {
+        #region Arguments
+        public static void ArgumentNotNull(string name, object value)
         {
-            return methods.Where(m => m.IsVirtual && !m.IsFinal).ToArray();
+            if (value == null) throw new ArgumentNullException(name);
+        }
+        #endregion
+
+        #region Members
+        public static void OverridableMethod(MethodCallExpression exp)
+        {
+            if (!exp.Method.IsVirtual || exp.Method.IsFinal)
+                throw new InvalidOperationException(string.Concat("Method must be virtual and not final: ", exp.Method.Name, "."));
         }
 
-        public static MethodInfo[] SelectGetters(this MethodInfo[] methods)
+        public static void OverridableProperty(Type type, string property)
         {
-			return methods.Where(m => m.Name.StartsWith("get_", StringComparison.OrdinalIgnoreCase)).ToArray();
+			if (!type.GetMethod(property).IsVirtual || type.GetMethod(property).IsFinal)
+				throw new InvalidOperationException(string.Concat("Property must be virtual and not final: ", type.FullName, ".", property, "."));
         }
 
-        public static MethodInfo[] SelectSetters(this MethodInfo[] methods) 
-        {
-            return methods.Where(m => m.Name.StartsWith("set_", StringComparison.OrdinalIgnoreCase)).ToArray();
-        }
-
-		public static Type[] GetMethodParameterTypes(this MethodInfo method)
-		{
-			return (from t in method.GetParameters()
-					select t.ParameterType).ToArray();
-		}
-
-        public static MethodSignature GetMethodSignature(this MethodInfo info)
-        {
-            return new MethodSignature(info.Name, info.GetMethodParameterTypes());
-        }
-
-        public static MethodInfo[] GetMethodsToIntercept(this Type type)
-        {
-            return type.IsInterface ?
-                type.GetMethods(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public)
-                : type.GetMethods(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public)
-				.SelectOverridableMethods();
-		}
-
+        #endregion        
+		
 	}
 }

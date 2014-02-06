@@ -27,6 +27,7 @@ using CilBuilder = Proxi.ProxyFactory;
 
 namespace FluentAop
 {
+
     public class Proxy<T>
 	{
 
@@ -35,7 +36,7 @@ namespace FluentAop
 		private InterceptorStateCollection states;
         private T proxy;
 		private List<Type> implementedTypes = new List<Type>();
-        private IDictionary<MethodSignature, CallbackCollection> register = new Dictionary<MethodSignature, CallbackCollection>();
+        private IDictionary<MethodSignature, CallbackCollection> registry = new Dictionary<MethodSignature, CallbackCollection>();
         private List<MethodSignature> interceptedMembers = new List<MethodSignature>();
 		private readonly bool isInterface;
         private CilBuilder cilBuilder;
@@ -82,7 +83,7 @@ namespace FluentAop
 			var methods = typeof(T)
 				.GetMethodsToIntercept()
 				.SelectGetters();
-			RegisterSignatures(methods.Select(m => m.ExtractSignature()));
+			RegisterSignatures(methods.Select(m => m.GetMethodSignature()));
 			return this;
 		}
 
@@ -91,21 +92,21 @@ namespace FluentAop
 			var methods = typeof(T)
 				.GetMethodsToIntercept()
 				.SelectSetters();
-			RegisterSignatures(methods.Select(m => m.ExtractSignature()));
+			RegisterSignatures(methods.Select(m => m.GetMethodSignature()));
 			return this;
 		}
 
 		public Proxy<T> InterceptAll()
 		{
 			var methods = typeof(T).GetMethodsToIntercept();
-			RegisterSignatures(methods.Select(m => m.ExtractSignature()));
+			RegisterSignatures(methods.Select(m => m.GetMethodSignature()));
 			return this;
 		}
 
         public Proxy<T> InterceptMethods(params Expression<Action<T>>[] methods)
         {
             Require.ArgumentNotNull("methods", methods);
-            var signatures = methods.Select(p => p.GetMethodExpression().Method.ExtractSignature());
+            var signatures = methods.Select(p => p.GetMethodExpression().Method.GetMethodSignature());
             RegisterSignatures(signatures);
             return this;
         }
@@ -116,7 +117,7 @@ namespace FluentAop
             var methods = typeof(T)
                 .GetMethodsToIntercept()
                 .Where(m => predicate(m));
-            RegisterSignatures(methods.Select(m => m.ExtractSignature()));
+            RegisterSignatures(methods.Select(m => m.GetMethodSignature()));
             return this;
         }
 
@@ -170,7 +171,7 @@ namespace FluentAop
 		{
 			Require.ArgumentNotNull("action", action);
             var callback = new OnBeforeCallback(action);            
-            interceptedMembers.ForEach(ms => register[ms].Add(callback));
+            interceptedMembers.ForEach(ms => registry[ms].Add(callback));
 			return this;
 		}
 
@@ -178,7 +179,7 @@ namespace FluentAop
 		{
 			Require.ArgumentNotNull("action", action);
             var callback = new OnBeforeCallback(action);
-            interceptedMembers.ForEach(e => register[e].Add(callback));
+            interceptedMembers.ForEach(e => registry[e].Add(callback));
 			return this;
 		}
 
@@ -186,7 +187,7 @@ namespace FluentAop
 		{
 			Require.ArgumentNotNull("action", action);
 			var callback = new OnInvokeCallback(action);
-            interceptedMembers.ForEach(e => register[e].Add(callback));
+            interceptedMembers.ForEach(e => registry[e].Add(callback));
 			return this;
 		}
 
@@ -194,7 +195,7 @@ namespace FluentAop
 		{
 			Require.ArgumentNotNull("action", action);
 			var callback = new OnInvokeCallback(action);
-            interceptedMembers.ForEach(e => register[e].Add(callback));
+            interceptedMembers.ForEach(e => registry[e].Add(callback));
 			return this;
 		}
 
@@ -202,7 +203,7 @@ namespace FluentAop
         {
             Require.ArgumentNotNull("action", action);
             var callback = new OnCatchCallback(action);
-            interceptedMembers.ForEach(e => register[e].Add(callback));
+            interceptedMembers.ForEach(e => registry[e].Add(callback));
             return this;
         }
 
@@ -210,7 +211,7 @@ namespace FluentAop
         {
             Require.ArgumentNotNull("action", action);
             var callback = new OnCatchCallback(action);
-            interceptedMembers.ForEach(e => register[e].Add(callback));
+            interceptedMembers.ForEach(e => registry[e].Add(callback));
             return this;
         }
 
@@ -218,7 +219,7 @@ namespace FluentAop
         {
             Require.ArgumentNotNull("action", action);
             var callback = new OnFinallyCallback(action);
-            interceptedMembers.ForEach(e => register[e].Add(callback));
+            interceptedMembers.ForEach(e => registry[e].Add(callback));
             return this;
         }
 
@@ -226,7 +227,7 @@ namespace FluentAop
         {
             Require.ArgumentNotNull("action", action);
             var callback = new OnFinallyCallback(action);
-            interceptedMembers.ForEach(e => register[e].Add(callback));
+            interceptedMembers.ForEach(e => registry[e].Add(callback));
             return this;
         }
 
@@ -234,7 +235,7 @@ namespace FluentAop
         {
             Require.ArgumentNotNull("action", action);
             var callback = new OnAfterCallback(action);
-            interceptedMembers.ForEach(e => register[e].Add(callback));
+            interceptedMembers.ForEach(e => registry[e].Add(callback));
             return this;
         }
 
@@ -242,7 +243,7 @@ namespace FluentAop
 		{
 			Require.ArgumentNotNull("action", action);
             var callback = new OnAfterCallback(action);
-            interceptedMembers.ForEach(e => register[e].Add(callback));
+            interceptedMembers.ForEach(e => registry[e].Add(callback));
             return this;
 		}
 
@@ -250,7 +251,7 @@ namespace FluentAop
 		{
 			Require.ArgumentNotNull("action", action);
             var callback = new OnReturnCallback(action);
-            interceptedMembers.ForEach(e => register[e].Add(callback));
+            interceptedMembers.ForEach(e => registry[e].Add(callback));
             return this;
 		}
 
@@ -258,7 +259,7 @@ namespace FluentAop
 		{
 			Require.ArgumentNotNull("action", action);
             var callback = new OnReturnCallback(action);
-            interceptedMembers.ForEach(e => register[e].Add(callback));
+            interceptedMembers.ForEach(e => registry[e].Add(callback));
             return this;
 		}
 
@@ -266,13 +267,13 @@ namespace FluentAop
 		{
 			var wrapper = new MethodWrapper();
 			action(wrapper);
-			wrapper.CallbackCollection.ForEach(callback => interceptedMembers.ForEach(e => register[e].Add(callback)));
+			wrapper.CallbackCollection.ForEach(callback => interceptedMembers.ForEach(e => registry[e].Add(callback)));
 			return this;
 		}
 
 		public Proxy<T> With<TMethodWrapper>(TMethodWrapper wrapper) where TMethodWrapper : IMethodWrapper
 		{
-			wrapper.CallbackCollection.ForEach(callback => interceptedMembers.ForEach(e => register[e].Add(callback)));
+			wrapper.CallbackCollection.ForEach(callback => interceptedMembers.ForEach(e => registry[e].Add(callback)));
 			return this;
 		}
 
@@ -282,10 +283,10 @@ namespace FluentAop
 			{
 				if (proxy == null)
 				{
-					Confirm.Assertion(register.Keys.Count > 0, "Proxy definition must specify what members have to be intercepted. Specify one or more members utilizing Intercept*() methods.");
-					Confirm.Assertion(register.All(vp => vp.Value.Count > 0), "One or more intercepted members do not specify how to handle interception. Specify interception behavior utilizing On*() methods.");
+					Confirm.Assertion(registry.Keys.Count > 0, "Proxy definition must specify what members have to be intercepted. Specify one or more members utilizing Intercept*() methods.");
+					Confirm.Assertion(registry.All(vp => vp.Value.Count > 0), "One or more intercepted members do not specify how to handle interception. Specify interception behavior utilizing On*() methods.");
                     states = new InterceptorStateCollection();
-                    foreach (var key in register.Keys) states.Add(new InterceptorState(key, register[key]));
+                    foreach (var key in registry.Keys) states.Add(new InterceptorState(key, registry[key]));
                     context = new InterceptorContext(states);
                     proxy = (target == null) ?
                         CilBuilder.Create<T>(context, implementedTypes.ToArray()) :
@@ -317,7 +318,7 @@ namespace FluentAop
 		private void RegisterMethods(params MethodCallExpression[] methods)
 		{
             if (!isInterface) methods.ForEach(m => Require.OverridableMethod(m));
-            RegisterSignatures(methods.Select(m => m.Method.ExtractSignature()));
+            RegisterSignatures(methods.Select(m => m.Method.GetMethodSignature()));
 		}
 
 		private void RegisterSignatures(IEnumerable<MethodSignature> signatures)
@@ -325,10 +326,12 @@ namespace FluentAop
             interceptedMembers = new List<MethodSignature>(signatures);
             foreach (var signature in interceptedMembers) 
             {
-                if(!register.ContainsKey(signature))
-                    register.Add(signature, new CallbackCollection());
+                if(!registry.ContainsKey(signature))
+                    registry.Add(signature, new CallbackCollection());
             }
 		}
 		#endregion
+
+
     }
 }
